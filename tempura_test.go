@@ -1,12 +1,36 @@
 package tempura
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func ExampleFromBytes() {
+	var tmp *TempFile
+	var err error
+
+	// Creates a temporary file in /tmp dir, prefixed with "test_"
+	// and containing three bytes "a", "b", "c"
+	tmp, err = FromBytes("/tmp", "test_", []byte{'a', 'b', 'c'})
+	if err != nil {
+		// Handle err
+	}
+	defer tmp.Close()
+	defer os.Remove(tmp.Name())
+
+	// The tmp file descriptor is seeked to 0 and ready to be read/written
+	data, err := tmp.Read(make([]byte, 3))
+	if err != nil {
+		// Handle error
+	}
+
+	fmt.Println(string(data))
+	// Output: "abc"
+}
 
 func TestFromBytes_creates_a_file(t *testing.T) {
 	tmp, err := FromBytes("/tmp", "test_tempura_", []byte{'a', 'b', 'c'})

@@ -1,3 +1,5 @@
+// Package tempura provides temporary files creation and manipulation helpers
+// for the purposes of enhancing tests involving files creation.
 package tempura
 
 import (
